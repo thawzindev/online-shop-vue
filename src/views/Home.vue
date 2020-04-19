@@ -1,18 +1,37 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js App" />
-  </div>
+<div class="container">
+    <div class="row">
+        <Item v-for="product in products" :key="product.id" :product="product"/>
+    </div>
+    </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import HelloWorld from "@/components/HelloWorld.vue";
+import Item from '@/components/Item.vue'
+import 'bootstrap/dist/css/bootstrap.css'
+import 'bootstrap-vue/dist/bootstrap-vue.css'
+import ProductService from '@/services/ProductService.js'
 
 export default {
-  name: "Home",
-  components: {
-    HelloWorld
-  }
-};
+    components: {
+        Item
+    },
+    data() {
+        return {
+            products: [],
+        }
+    },
+    methods: {
+        
+    },
+    created() {
+    ProductService.getProducts()
+        .then(response => {
+            this.products = response.data;
+        })
+        .catch(err => {
+            console.log(err);
+        })
+    }
+}
 </script>
