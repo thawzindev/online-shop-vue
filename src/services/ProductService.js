@@ -10,9 +10,9 @@ const instance = axios.create({
   });
 
   export default {
-      getProducts() {
-          return instance.get('data')
-      },
+      getProducts(page = 1) {
+          return instance.get('data'+'?_page='+page+'&_limit=20')
+      },  
       getProduct(id) {
           return  instance.get('data/' +id )
       }

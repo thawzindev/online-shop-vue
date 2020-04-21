@@ -19,19 +19,44 @@ export default {
     data() {
         return {
             products: [],
+            page: 1,
+            count: Number,
+            limit: 0
         }
     },
     methods: {
-        
+        callItems(page=1) {
+            ProductService.getProducts(page)
+            .then(response => {
+                if (this.products.length == 0) {
+                    this.products = response.data;
+                } else {
+                    if (response.data.length == 0) {
+                        this.limit = 1
+                        console.log('ended')
+                    }
+                    this.products.push(...response.data)
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        }
     },
     created() {
-    ProductService.getProducts()
-        .then(response => {
-            this.products = response.data;
-        })
-        .catch(err => {
-            console.log(err);
-        })
-    }
+        this.callItems()
+    },
+    mounted() {
+        window.onscroll = () => {
+        let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
+
+        if (bottomOfWindow  && this.limit != 1) {
+            this.page++
+            this.callItems(this.page)
+            console.log('called'+ this.page )
+        }
+        };
+ 
+    },
 }
 </script>
