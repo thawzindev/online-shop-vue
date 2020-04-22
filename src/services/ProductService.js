@@ -11,7 +11,7 @@ const instance = axios.create({
 
   export default {
       getProducts(page = 1) {
-          return instance.get('data'+'?_page='+page+'&_limit=20')
+          return instance.get('data'+'?_page='+page+'&_limit=16')
       },  
       getProduct(id) {
           return  instance.get('data/' +id )

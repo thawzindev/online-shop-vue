@@ -1,12 +1,13 @@
 <template>
   <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> 
-      <!-- <router-link to="/about" class="float-right">Cart</router-link> -->
-      <a href="#" @click="showCart" class="float-right">Cart ({{cartCount}})</a>
+    <nav class="navbar navbar-light bg-light">
+      <span class="navbar-brand mb-0 h1"><router-link to="/">Home</router-link> </span>
+      <span class="navbar-text">
+        <a href="#" @click="showCart" class="float-right"><span class="fa fa-shopping-cart"></span> ({{cartCount}})</a>
+      </span>
+    </nav>
       <Cart v-if="showModal" @closeCart="showModal = false"/>
-    </div>
-    <router-view />
+    <router-view/>
   </div>
 </template>
 
@@ -36,3 +37,14 @@ export default {
 }
 
 </script>
+
+<style scoped>
+  a {
+    color: black;
+    text-decoration: none;
+  }
+
+  nav {
+    margin-bottom: 20px;
+  }
+</style>

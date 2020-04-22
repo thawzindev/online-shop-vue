@@ -5,6 +5,8 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
+import '../node_modules/nprogress/nprogress.css'
+import NProgress from 'nprogress';
 
 Vue.config.productionTip = false
 
@@ -23,6 +25,21 @@ requireComponent.keys().forEach(fileName => {
 
   Vue.component(componentName, componentConfig.default || componentConfig)
 })
+
+
+router.beforeResolve((to, from, next) => {
+  if (to.name) {
+      NProgress.start()
+      console.log(from)
+  }
+  next()
+})
+
+router.afterEach((to, from) => {
+  console.log(to, from)
+  NProgress.done()
+})
+
 
 new Vue({
   router,

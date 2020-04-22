@@ -19,6 +19,7 @@
                         <th scope="col">#</th>
                         <th scope="col">Products</th>
                         <th scope="col">Quantity</th>
+                        <th scope="col">Per Price</th>
                         <th scope="col">Price</th>
                         </tr>
                     </thead>
@@ -27,17 +28,20 @@
                           <td>{{ index+1 }}</td>
                           <td>{{ item.productName }}</td>
                           <td>{{ item.quantity }}</td>
+                          <td>{{ item.productPrice }}</td>
                           <td>{{ item.perProductPrice }} </td>
                         </tr>
                         <tr>
                           <td>Total</td>
                           <td></td>
                           <td></td>
+                          <td></td>
                           <td id="totalPrice">{{ totalPrice }}</td>
                         </tr>
                     </tbody>
                     </table>
-
+                  <button class="btn btn-success float-right">Checkout</button>
+                  <button class="btn btn-danger float-left">Clear Cart</button>
               </div>
             </div>
           </div>
