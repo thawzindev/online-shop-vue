@@ -9,26 +9,30 @@ export default new Vuex.Store({
   },
   mutations: {
     ADD_TO_CART(state, productId) {
-
       const newProduct = state.cart.find( (product) => product.id === productId )
-      if (newProduct) {
-        console.log("old item existed")
-        newProduct.quantity++
-      }
-      else {
-        console.log("new")
-        const newItem = {
-            id: productId,
-            quantity: 1
-          }
-
-        state.cart.push(newItem)
-      }
+        if (newProduct) {
+          console.log("old item existed")
+          newProduct.quantity++
+        }
+        else {
+          console.log("new")
+          const newItem = {
+              id: productId,
+              quantity: 1
+            }
+          state.cart.push(newItem)
+        }
+    },
+    CLEAR_CART(state) {
+      return state.cart = []
     }
   },
   actions: {
     addToCard({commit}, id) {
-    commit('ADD_TO_CART', id)
+      commit('ADD_TO_CART', id)
+    },
+    clearCart({commit}) {
+      commit('CLEAR_CART')
     }
   },
   getters: {

@@ -1,7 +1,7 @@
 <template>
 <div class="container">
     <div class="row">
-        <Item v-for="product in products" :key="product.id" :product="product"/>
+        <Item v-for="(product,index) in products" :key="index" :product="product"/>
     </div>
     </div>
 </template>
@@ -27,15 +27,15 @@ export default {
     methods: {
         callItems(page=1) {
             ProductService.getProducts(page)
-            .then(response => {
+            .then(response => { 
                 if (this.products.length == 0) {
-                    this.products = response.data;
+                    this.products = response.data.data.data;
                 } else {
-                    if (response.data.length == 0) {
+                    if (response.data.data.data.length == 0) {
                         this.limit = 1
                         console.log('ended')
                     }
-                    this.products.push(...response.data)
+                    this.products.push(...response.data.data.data)
                 }
             })
             .catch(err => {

@@ -1,20 +1,20 @@
 <template>
-    <div>
+    <div v-if="initialzed">
         <div class="container">
             <div class="row">
                 <div class="col-6">
-                    <h1>{{ product.productName }}</h1>
-                    <h5>KS : {{ product.productPrice }}</h5>
+                    <h1>{{ product.product_name }}</h1>
+                    <h5>KS : {{ product.price }}</h5>
                     <br>
                     <button class="btn btn-success" @click="addToCard">Add to Cart</button>
                 </div>
                 <div class="col-6">
-                    <img :src="product.productImage" :alt="product.productName">
+                    <img :src="product.product_image" :alt="product.product_name">
                 </div>
                 <div class="col-6">
                     <h4>Description</h4>
                     <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita vel animi vitae doloremque, asperiores non numquam voluptates molestiae doloribus. Quis quam ad vero, alias sint hic fugiat adipisci fuga ab?
+                        {{ product.description }}
                     </p>
                 </div>
             </div>
@@ -31,7 +31,8 @@ import store from '@/store/index.js'
 export default {
     data() {
         return {
-            product: Object
+            product: Object,
+            initialzed: false
         }
     },
     props: ['id'],
@@ -39,6 +40,9 @@ export default {
         ProductService.getProduct(this.id)
         .then(response => {
             this.product = response.data;
+        })
+        .then(() => {
+            this.initialzed = true
         })
         .catch(err => {
             console.log(err);

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div v-if="initialized">
     <transition name="modal">
       <div class="modal-mask">
         <div class="modal-wrapper">
@@ -26,7 +26,7 @@
                     <tbody>
                         <tr v-for="(item, index) in items" :key="index">
                           <td>{{ index+1 }}</td>
-                          <td>{{ item.productName }}</td>
+                          <td>{{ item.product_name }}</td>
                           <td>{{ item.quantity }}</td>
                           <td>{{ item.productPrice }}</td>
                           <td>{{ item.perProductPrice }} </td>
@@ -40,8 +40,8 @@
                         </tr>
                     </tbody>
                     </table>
-                  <button class="btn btn-success float-right">Checkout</button>
-                  <button class="btn btn-danger float-left">Clear Cart</button>
+                  <button class="btn btn-success float-right" @click="checkOut">Checkout</button>
+                  <button class="btn btn-danger float-left" @click="clearCart" :disabled="this.items.length == 0">Clear Cart</button>
               </div>
             </div>
           </div>
@@ -56,30 +56,60 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import ProductService from '@/services/ProductService.js'
+import store from '@/store/index.js'
+import Swal from 'sweetalert2'
+
 
 export default {
     data() {
       return {
           items: [],
-          totalPrice : 1000,
+          totalPrice : 0,
           initialValue : 0,
+          initialized: false,
       }
     },
     methods: {
       closeCart() {
         this.$emit('closeCart', false)
+      },
+      checkOut() {
+        this.$router.push('check-out').then(() => {
+          this.$emit('closeCart', false)
+        })
+      },
+      clearCart() {
+        store.dispatch('clearCart').then(() => {
+          setTimeout(() => {
+            this.closeCart()
+            Swal.fire({
+              position: 'bottom-end',
+              icon: 'success',
+              title: 'Cleared Cart',
+              showConfirmButton: false,
+              timer: 2000,
+              width: '300px',
+              height: '100px'
+            })
+          }, 500)
+        })
       }
     },
-    created() {
-      this.$store.getters.cartItems.map(
+    created() {   
+      const products = this.$store.getters.cartItems
+
+      products.map(
         item => ProductService.getProduct(item.id)
         .then(response => {
             response.data.quantity = item.quantity
-            response.data.perProductPrice = Math.round(item.quantity * response.data.productPrice).toFixed(3)
+            response.data.perProductPrice = Math.round(item.quantity * response.data.price).toFixed(3)
             this.items.push(response.data);
         })
         .then(() => {
           this.totalPrice = this.items.reduce((a, item) => +a + +item.perProductPrice, 0).toFixed(3)
+        })
+        .then(() => {
+          this.initialized = true
         })
         .catch(err => {
             console.log(err);

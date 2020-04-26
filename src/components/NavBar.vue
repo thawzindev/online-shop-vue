@@ -21,6 +21,7 @@ export default {
     },
     methods: {
         showCart() {
+          console.log("SHOW")
           this.showModal = true
         },
     },
