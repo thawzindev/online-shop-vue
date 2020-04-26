@@ -39,13 +39,16 @@ export default {
     created() {
         ProductService.getProduct(this.id)
         .then(response => {
+            if (Object.entries(response.data).length === 0) {
+                this.$router.push({ name: 'error'})
+            }
             this.product = response.data;
         })
         .then(() => {
             this.initialzed = true
         })
         .catch(err => {
-            console.log(err);
+            console.log("err" + err);
         })
     },
     methods: {

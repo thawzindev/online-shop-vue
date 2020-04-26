@@ -74,9 +74,8 @@ export default {
         this.$emit('closeCart', false)
       },
       checkOut() {
-        this.$router.push('check-out').then(() => {
-          this.$emit('closeCart', false)
-        })
+        this.$router.push('check-out')
+        this.$emit('closeCart', false)
       },
       clearCart() {
         store.dispatch('clearCart').then(() => {

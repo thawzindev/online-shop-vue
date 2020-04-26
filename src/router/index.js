@@ -26,10 +26,14 @@ const routes = [
     props: true,
   },
   {
-    path: "*",
+    path: "/404",
     name: "error",
     component: ErrorPage,
     props: true,
+  },
+  {
+    path: "*",
+    redirect: '/404'
   }
 ];
 
