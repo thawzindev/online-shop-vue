@@ -3,10 +3,11 @@
     <div class="row">
         <div class="col-12">
             <p>
-                <Category v-for="category in categories" :key="category.id" :category="category"/>
+                <Category v-for="(category,index) in categories" :key="index" :category="category"/>
             </p>
         </div>
-        <Item v-for="(product,index) in products" :key="index" :product="product"/>
+
+        <Item v-for="(product,index) in products" :key="index" :product="product"/> 
     </div>
     </div>
 </template>
@@ -32,9 +33,11 @@ export default {
             limit: 0,
         }
     },
+    props: ['id'],
     methods: {
         callItems(page=1) {
-            ProductService.getProducts(page)
+            console.log('path is '+this.$route.params.id) 
+            ProductService.getProductsByCategory(page, this.id)
             .then(response => { 
                 if (this.products.length == 0) {
                     this.products = response.data.data;
@@ -64,6 +67,13 @@ export default {
         this.getCategories()
         this.callItems()
     },
+    watch: {
+        '$route.path': function(val, oldVal){
+            console.log(val, oldVal)
+            this.products = []
+            this.callItems();
+        }
+    },
     mounted() {
         window.onscroll = () => {
         let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
@@ -83,5 +93,9 @@ export default {
 <style scoped>
     a {
         margin-right:  10px;
+    }
+
+    .active {
+        color: red;
     }
 </style>

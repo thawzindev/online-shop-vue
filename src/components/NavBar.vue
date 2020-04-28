@@ -3,7 +3,7 @@
     <nav class="navbar navbar-light bg-light">
       <span class="navbar-brand mb-0 h1"><router-link to="/">Home</router-link> </span>
       <span class="navbar-text">
-        <a href="#" @click="showCart" class="float-right"><span class="fa fa-shopping-cart"></span> ({{cartCount}})</a>
+        <a href="#" @click.prevent="showCart" class="float-right"><span class="fa fa-shopping-cart"></span> ({{cartCount}})</a>
       </span>
     </nav>
       <Cart v-if="showModal" @closeCart="showModal = false"/>

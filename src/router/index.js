@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../views/Home.vue";
 import ProductShow from "../views/ProductShow.vue";
+import ProductInCategory from "../views/ProductInCategory.vue";
 import CheckOut from "../views/CheckOut.vue";
 import ErrorPage from "../views/ErrorPage.vue";
 
@@ -17,6 +18,12 @@ const routes = [
     path: "/product/:id",
     name: "product-show",
     component: ProductShow,
+    props: true,
+  },
+  {
+    path: "/category/:id",
+    name: "getProductByCategory",
+    component: ProductInCategory,
     props: true,
   },
   {

@@ -12,6 +12,7 @@
                     <img :src="product.product_image" :alt="product.product_name">
                 </div>
                 <div class="col-6">
+                    <h5>Category : {{ product.category.name_en }}</h5>
                     <h4>Description</h4>
                     <p>
                         {{ product.description }}
@@ -39,6 +40,7 @@ export default {
     created() {
         ProductService.getProduct(this.id)
         .then(response => {
+            console.log(response)
             if (Object.entries(response.data).length === 0) {
                 this.$router.push({ name: 'error'})
             }
