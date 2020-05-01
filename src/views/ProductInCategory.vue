@@ -36,7 +36,6 @@ export default {
     props: ['id'],
     methods: {
         callItems(page=1) {
-            console.log('path is '+this.$route.params.id) 
             ProductService.getProductsByCategory(page, this.id)
             .then(response => { 
                 if (this.products.length == 0) {

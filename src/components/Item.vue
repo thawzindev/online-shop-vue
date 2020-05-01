@@ -1,46 +1,32 @@
 <template>
-  <div class="col-md-3 col-sm-6 item">
-    <div class="product-grid6">
-        <div class="product-image6">
-            <a href="#">
-                <img :src="product.product_image" @error="addDefaultImage" :alt="product.product_name" class="pic-1">
-            </a>
+  <div class="col-lg-4 col-md-6 col-sm-6">
+    <div class="product__item">
+        <div class="product__item__pic set-bg" data-setbg="img/product/product-4.jpg" :style="{ backgroundImage: `url('${product.product_image}')` }">
+            <ul class="product__item__pic__hover">
+                <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                <li><a href="#" @click.prevent="detail"><i class="fa fa-eye"></i></a></li>
+                <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+            </ul>
         </div>
-        <div class="product-content">
-            <h3 class="title"><a href="#">{{ product.product_name }}</a></h3>
-            <p>{{ product.category }}</p>
-            <div class="price">{{ product.price }} <span>MMK</span>
-                <!-- <span>{{ product.productPrice }}</span> -->
-            </div>
+        <div class="product__item__text">
+            <h6><a href="#">Crab Pool Security</a></h6>
+            <h5>$30.00</h5>
         </div>
-        <ul class="social">
-          <router-link :to="{ name: 'product-show', params: { 'id' : product.uuid } }">
-            <li><a href="#" data-tip="Quick View"><i class="fa fa-search"></i></a></li>
-          </router-link>
-            <li><a href="#" data-tip="Add to Wishlist"><i class="fa fa-shopping-bag"></i></a></li>
-            <li><a href="#" data-tip="Add to Cart" @click.prevent="addToCard(product.uuid)"><i class="fa fa-shopping-cart"></i></a></li>
-        </ul>
     </div>
   </div>
 </template>
 
 <script>
 
-import 'bootstrap/dist/css/bootstrap.css'
-import 'bootstrap-vue/dist/bootstrap-vue.css'
-import '@/assets/css/item.css'
-import store from '@/store/index.js'
+// import store from '@/store/index.js'
 
 export default {
   props: {
     product: Object
   },
   methods: {
-    addToCard(uuid) {
-        store.dispatch('addToCard', uuid)
-    },
-    addDefaultImage(event) {
-      event.target.src = "https://cdn3.iconfinder.com/data/icons/modifiers-add-on-1/48/v-17-512.png"
+    detail() {
+      this.$router.push({ name: 'product-show', params: { id: this.product.id } })
     }
   },
 }

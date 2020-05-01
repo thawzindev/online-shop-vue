@@ -8,17 +8,18 @@ export default new Vuex.Store({
     cart: []
   },
   mutations: {
-    ADD_TO_CART(state, productId) {
-      const newProduct = state.cart.find( (product) => product.id === productId )
+    ADD_TO_CART(state, payload) {
+      console.log(payload.id)
+      const newProduct = state.cart.find( (product) => product.id === payload.id )
         if (newProduct) {
           console.log("old item existed")
-          newProduct.quantity++
+          newProduct.quantity+= payload.quantity
         }
         else {
           console.log("new")
           const newItem = {
-              id: productId,
-              quantity: 1
+              id: payload.id,
+              quantity: payload.quantity
             }
           state.cart.push(newItem)
         }
@@ -28,8 +29,8 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    addToCard({commit}, id) {
-      commit('ADD_TO_CART', id)
+    addToCard: ({commit}, payload) => {
+      commit('ADD_TO_CART',  payload )
     },
     clearCart({commit}) {
       commit('CLEAR_CART')
@@ -40,8 +41,7 @@ export default new Vuex.Store({
       let initialValue = 0
       return state.cart.reduce(
           (count, item) => count + item.quantity
-          , initialValue
-      )
+          , initialValue)
     },
     cartItems: state => {
       return state.cart

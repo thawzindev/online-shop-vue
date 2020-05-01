@@ -1,5 +1,5 @@
 <template>
-    <div v-if="initialized">
+    <div>
     <transition name="modal">
       <div class="modal-mask">
         <div class="modal-wrapper">

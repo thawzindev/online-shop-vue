@@ -4,7 +4,12 @@ import Home from "../views/Home.vue";
 import ProductShow from "../views/ProductShow.vue";
 import ProductInCategory from "../views/ProductInCategory.vue";
 import CheckOut from "../views/CheckOut.vue";
+import Shop from "../views/Shop.vue";
 import ErrorPage from "../views/ErrorPage.vue";
+import PaymentConfirm from "../views/PaymentConfirm.vue";
+import Cart from "../views/Cart.vue";
+import ContactUs from "../views/ContactUs.vue";
+import Blog from "../views/Blog.vue";
 
 Vue.use(VueRouter);
 
@@ -15,7 +20,31 @@ const routes = [
     component: Home
   },
   {
-    path: "/product/:id",
+    path: "/shop",
+    name: "Shop",
+    component: Shop,
+    props: true,
+  },
+  {
+    path: "/cart",
+    name: "Cart",
+    component: Cart,
+    props: true,
+  },
+  {
+    path: "/blog",
+    name: "Blog",
+    component: Blog,
+    props: true,
+  },
+  {
+    path: "/contact-us",
+    name: "contact-us",
+    component: ContactUs,
+    props: true,
+  },
+  {
+    path: "/product/:id/detail",
     name: "product-show",
     component: ProductShow,
     props: true,
@@ -30,6 +59,12 @@ const routes = [
     path: "/check-out",
     name: "check-out",
     component: CheckOut,
+    props: true,
+  },
+  {
+    path: "/payment-confirm",
+    name: "payment-confirm",
+    component: PaymentConfirm,
     props: true,
   },
   {

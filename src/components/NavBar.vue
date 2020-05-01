@@ -1,51 +1,110 @@
 <template>
-  <div id="app">
-    <nav class="navbar navbar-light bg-light">
-      <span class="navbar-brand mb-0 h1"><router-link to="/">Home</router-link> </span>
-      <span class="navbar-text">
-        <a href="#" @click.prevent="showCart" class="float-right"><span class="fa fa-shopping-cart"></span> ({{cartCount}})</a>
-      </span>
-    </nav>
-      <Cart v-if="showModal" @closeCart="showModal = false"/>
-    <router-view/>
+  <div>
+    <header class="header">
+        <div class="header__top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="header__top__left">
+                            <ul>
+                                <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
+                                <li>Free Shipping for all Order of $99</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="header__top__right">
+                            <div class="header__top__right__social">
+                                <a href="#"><i class="fa fa-facebook"></i></a>
+                                <a href="#"><i class="fa fa-twitter"></i></a>
+                                <a href="#"><i class="fa fa-linkedin"></i></a>
+                                <a href="#"><i class="fa fa-pinterest-p"></i></a>
+                            </div>
+                            <div class="header__top__right__language">
+                                <img src="../assets/img/language.png" alt="">
+                                <div>English</div>
+                                <span class="arrow_carrot-down"></span>
+                                <ul>
+                                    <li><a href="#">Spanis</a></li>
+                                    <li><a href="#">English</a></li>
+                                </ul>
+                            </div>
+                            <div class="header__top__right__auth">
+                                <a href="#"><i class="fa fa-user"></i> Login</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="header__logo">
+                        <router-link :to="{ name: 'Home' }"><img src="../assets/img/logo.png" alt=""></router-link>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <nav class="header__menu">
+                        <ul>
+                            <li><router-link :to="{ name: 'Home' }">Home</router-link></li>
+                            <li><router-link :to="{ name: 'Shop' }">Shop</router-link></li>
+                            <!-- <li><a href="#">Pages</a>
+                                <ul class="header__menu__dropdown">
+                                    <li><a href="./shop-details.html">Shop Details</a></li>
+                                    <li><a href="./shoping-cart.html">Shoping Cart</a></li>
+                                    <li><a href="./checkout.html">Check Out</a></li>
+                                    <li><a href="./blog-details.html">Blog Details</a></li>
+                                </ul>
+                            </li> -->
+                            <li><router-link :to="{ name: 'Blog' }">Blog</router-link></li>
+                            <li><router-link :to="{ name: 'contact-us'}">Contact</router-link></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="col-lg-3">
+                    <div class="header__cart">
+                        <ul>
+                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
+                            <!-- <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li> -->
+                            <li><router-link :to="{ name: 'Cart' }"><i class="fa fa-shopping-bag"></i><span>{{ cartCount }}</span></router-link></li>
+                        </ul>
+                        <div class="header__cart__price">item: <span>$150.00</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="humberger__open">
+                <i class="fa fa-bars"></i>
+            </div>
+        </div>
+    </header>
   </div>
 </template>
 
 <script>
 
-import Cart from '@/components/Cart.vue'
-
 export default {
-    components: {
-        Cart
-    },
-    methods: {
-        showCart() {
-          console.log("SHOW")
-          this.showModal = true
-        },
-    },
     data() {
         return {
-            showModal: false,
+            
         }
     },
+    methods: {
+        goTopShop() {
+            alert("HI")
+        },
+    },
     computed: {
-      cartCount() {
-        return this.$store.getters.cartCount
-      }
+        cartCount() {   
+            return this.$store.getters.cartCount
+        }
     },
 }
 
 </script>
 
 <style scoped>
-  a {
-    color: black;
-    text-decoration: none;
-  }
-
-  nav {
-    margin-bottom: 20px;
-  }
+    a.router-link-exact-active.router-link-active {
+    color:#7fad39;
+}
 </style>

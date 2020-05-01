@@ -1,6 +1,8 @@
 <template>
   <div>
     <NavBar/>
+    <router-view/>
+    <Footer/>
   </div>
 </template>
 
@@ -8,10 +10,14 @@
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import NavBar from '@/components/NavBar.vue'
+import Footer from '@/components/Footer.vue'
+import '@/assets/css/style.css';
 
 export default {
     components: {
-        NavBar
+        NavBar,
+        Footer,
+
     },
     data() {
         return {
@@ -25,28 +31,5 @@ export default {
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-.router-link-active {
-  color:green;
-  text-transform: uppercase;
-}
 </style>
