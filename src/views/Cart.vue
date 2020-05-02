@@ -1,13 +1,41 @@
 <template>
     <div>
         <BreadCrumb/>
-
     <!-- Shoping Cart Section Begin -->
-
     <section class="shoping-cart spad">
         <div class="container">
             <div class="row">
+
+                <!-- <div class="col-12" v-if="!initialized && !noItemInCart">
+                    <content-loader width="800" height="260">
+                        <rect x="64" y="10" rx="3" ry="3" width="60" height="14" /> 
+                        <rect x="9" y="36" rx="3" ry="3" width="769" height="4" /> 
+                        <rect x="118" y="60" rx="3" ry="3" width="49" height="12" /> 
+                        <rect x="367" y="7" rx="3" ry="3" width="60" height="14" /> 
+                        <rect x="662" y="6" rx="3" ry="3" width="60" height="14" /> 
+                        <rect x="519" y="6" rx="3" ry="3" width="60" height="14" /> 
+                        <rect x="72" y="52" rx="0" ry="0" width="30" height="28" /> 
+                        <rect x="14" y="179" rx="3" ry="3" width="750" height="4" /> 
+                        <rect x="46" y="196" rx="0" ry="0" width="74" height="17" /> 
+                        <rect x="45" y="226" rx="0" ry="0" width="73" height="7" /> 
+                        <rect x="43" y="240" rx="0" ry="0" width="161" height="25" /> 
+                        <rect x="361" y="192" rx="0" ry="0" width="396" height="90" /> 
+                        <rect x="353" y="62" rx="3" ry="3" width="412" height="8" /> 
+                        <rect x="119" y="147" rx="3" ry="3" width="49" height="12" /> 
+                        <rect x="72" y="138" rx="0" ry="0" width="30" height="28" /> 
+                        <rect x="353" y="143" rx="3" ry="3" width="411" height="8" /> 
+                        <rect x="116" y="103" rx="3" ry="3" width="49" height="12" /> 
+                        <rect x="70" y="95" rx="0" ry="0" width="30" height="28" /> 
+                        <rect x="354" y="105" rx="3" ry="3" width="408" height="8" />
+                    </content-loader>
+                </div> -->
+
+                <!-- <div class="col-lg-12" v-if="noItemInCart">
+                    <img src="https://www.redufy.com/img/png/empty-cart.png" class="mx-auto d-block" alt="">
+                </div> -->
+
                 <div class="col-lg-12">
+                      <!-- {{items}} -->
                     <div class="shoping__cart__table">
                         <table>
                             <thead>
@@ -20,7 +48,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            
                             <tr v-for="item in items" :key="item.id">
                                 <td class="shoping__cart__item">
                                     <img :src="item.product_image" alt="">
@@ -32,9 +59,9 @@
                                 <td class="shoping__cart__quantity">
                                     <div class="quantity">
                                         <div class="pro-qty">
-                                            <span class="dec qtybtn">-</span>
+                                            <span class="dec qtybtn" @click="decreaseQty(item.id)">-</span>
                                                 <input type="text" :value="item.quantity">
-                                            <span class="inc qtybtn">+</span></div>
+                                            <span class="inc qtybtn" @click="increaseQty(item.id)">+</span></div>
                                     </div>
                                 </td>
                                 <td class="shoping__cart__total">
@@ -50,7 +77,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row" v-if="initialized">
                 <div class="col-lg-6">
                     <div class="shoping__cart__btns">
                         <router-link :to="{ name: 'Shop' }" class="primary-btn cart-btn">CONTINUE SHOPPING</router-link>
@@ -71,8 +98,9 @@
                     <div class="shoping__checkout">
                         <h5>Cart Total</h5>
                         <ul>
-                            <li>Subtotal <span>${{this.totalPrice }}</span></li>
-                            <li>Total <span>${{this.totalPrice }}</span></li>
+                            <li>Subtotal <span>${{totalPrice}}</span></li>
+                            <li>Discount <span>$0</span></li>
+                            <li>Total <span>${{totalPrice}}</span></li>
                         </ul>
                         <!-- <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a> -->
                         <router-link class="primary-btn" :to="{ name: 'check-out' }">PROCEED TO CHECKOUT</router-link>
@@ -90,40 +118,48 @@
 <script>
 import BreadCrumb from '@/components/BreadCrumb.vue'
 import ProductService from '@/services/ProductService.js'
+// import { ContentLoader  } from 'vue-content-loader'
+// import { mapGetters } from 'vuex'
 
 export default {
     components: {
         BreadCrumb,
-        // ProductInCart
+        // ContentLoader
     },
     data() {
       return {
-          items: [],
-          totalPrice : 0,
-          initialValue : 0,
-          initialized: false,
+          initialized: true,
+          noItemInCart : true,
       }
     },
-    created() {   
-      const products = this.$store.getters.cartItems
-
-      products.map(
-        item => ProductService.getProduct(item.id)
-        .then(response => {
-            response.data.quantity = item.quantity
-            response.data.perProductPrice = Math.round(item.quantity * response.data.price).toFixed(3)
-            this.items.push(response.data);
-        })
-        .then(() => {
-          this.totalPrice = this.items.reduce((a, item) => +a + +item.perProductPrice, 0).toFixed(3)
-        })
-        .then(() => {
-          this.initialized = true
-        })
-        .catch(err => {
-            console.log(err);
-        })
-      )
+    methods: {
+        increaseQty(id) {
+            this.$store.dispatch('increaseItem', id).then(() => {
+            })
+        },
+        decreaseQty(id) {
+            this.$store.dispatch('decreaseItem', id).then(() => {   
+            })
+        }
+    },
+    computed: {
+        // map `this.doneCount` to `this.$store.getters.doneTodosCount`
+        items: function () {
+            return this.$store.getters.cartItems.map(function (item) {
+                ProductService.getProduct(item.id).then(response => {
+                    item.price = response.data.price
+                    item.product_image = response.data.product_image
+                    item.product_name = response.data.product_name
+                    item.perProductPrice = Math.round(item.quantity * response.data.price).toFixed(3) 
+                })
+                return item
+            })
+        },
+        
+        totalPrice: function () {
+            return this.items.reduce((a, item) => +a + +item.perProductPrice, 0).toFixed(3)
+        }
+        
     },
 }
 </script>

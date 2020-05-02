@@ -291,6 +291,7 @@
                             
                         </div>
                     </div> -->
+                    
 
                     <div class="hero__search">
                         <div class="hero__search__form">
@@ -330,12 +331,49 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-              
+
+                    <div class="row" v-if="!initialized" height=500>
+                        <!-- content loader started -->
+                        <div class="col-12">
+                        <ContentLoader height="575" width="800">
+                        <rect x="55" y="19" rx="4" ry="4" width="139" height="132" /> 
+                        <rect x="106" y="47" rx="0" ry="0" width="1" height="0" /> 
+                        <rect x="566" y="17" rx="4" ry="4" width="139" height="132" /> 
+                        <rect x="301" y="19" rx="4" ry="4" width="139" height="132" /> 
+                        <rect x="71" y="160" rx="4" ry="4" width="108" height="10" /> 
+                        <rect x="92" y="177" rx="4" ry="4" width="63" height="9" /> 
+                        <rect x="320" y="160" rx="4" ry="4" width="108" height="10" /> 
+                        <rect x="341" y="176" rx="4" ry="4" width="63" height="9" /> 
+                        <rect x="584" y="160" rx="4" ry="4" width="108" height="10" /> 
+                        <rect x="607" y="175" rx="4" ry="4" width="63" height="9" /> 
+                        <rect x="52" y="205" rx="4" ry="4" width="139" height="132" /> 
+                        <rect x="85" y="361" rx="4" ry="4" width="63" height="9" /> 
+                        <rect x="306" y="202" rx="4" ry="4" width="139" height="132" /> 
+                        <rect x="320" y="341" rx="4" ry="4" width="108" height="10" /> 
+                        <rect x="342" y="357" rx="4" ry="4" width="63" height="9" /> 
+                        <rect x="566" y="204" rx="4" ry="4" width="139" height="132" /> 
+                        <rect x="582" y="344" rx="4" ry="4" width="108" height="10" /> 
+                        <rect x="605" y="358" rx="4" ry="4" width="63" height="9" /> 
+                        <rect x="49" y="390" rx="4" ry="4" width="139" height="132" /> 
+                        <rect x="62" y="529" rx="4" ry="4" width="108" height="10" /> 
+                        <rect x="65" y="347" rx="4" ry="4" width="108" height="10" /> 
+                        <rect x="83" y="544" rx="4" ry="4" width="63" height="9" /> 
+                        <rect x="307" y="390" rx="4" ry="4" width="139" height="132" /> 
+                        <rect x="322" y="527" rx="4" ry="4" width="108" height="10" /> 
+                        <rect x="345" y="541" rx="4" ry="4" width="63" height="9" /> 
+                        <rect x="566" y="391" rx="4" ry="4" width="139" height="132" /> 
+                        <rect x="581" y="527" rx="4" ry="4" width="108" height="10" /> 
+                        <rect x="604" y="540" rx="4" ry="4" width="63" height="9" />
+                    </ContentLoader>
+                    </div>
+                        <!-- content loader ended -->
+                    </div>
+                    <div class="row" v-if="initialized">
+
                     <Item v-for="(product,key) in products" :key="key" :product="product"/>
                        
                     </div>
-                    <div class="product__pagination">
+                    <div class="product__pagination" v-if="initialized">
                         <a href="#" v-for="page in meta_data.last_page" 
                             :key="page" :class="{ 'active':meta_data.current_page === page }"
                             @click.prevent="callPage(page)">
@@ -356,10 +394,12 @@
 import Item from '@/components/Item.vue'
 import BreadCrumb from '@/components/BreadCrumb.vue'
 import ProductService from '@/services/ProductService.js'
+import { ContentLoader  } from 'vue-content-loader'
 export default {
     components: {
         Item,
-        BreadCrumb
+        BreadCrumb,
+        ContentLoader
     },
     data() {
         return {
@@ -368,7 +408,8 @@ export default {
             page: 1,
             count: Number,
             limit: 0,
-            meta_data: Object
+            meta_data: Object,
+            initialized: false
         }
     },
     methods: {
@@ -378,6 +419,9 @@ export default {
             .then(response => { 
                 this.meta_data = response.data.meta
                 this.products = response.data.data
+            })
+            .then(() => {
+                this.initialized = true
             })
             .catch(err => {
                 console.log(err);
