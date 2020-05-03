@@ -25,12 +25,22 @@ export default {
     product: Object
   },
   methods: {
+    openToast(){
+        this.$toasted.success("added !", { 
+            icon : 'cart-plus',
+            theme: "bubble", 
+            position: "top-right", 
+            duration : 3000,
+        });
+    },
     detail() {
       this.$router.push({ name: 'product-show', params: { id: this.product.id } })
     },
     addToCart(product, quantity = 1) {
         const payload = {product, quantity}
-        store.dispatch('addToCard', payload)
+        store.dispatch('addToCard', payload).then(() => {
+          this.openToast()
+        })
     },
   },
 }

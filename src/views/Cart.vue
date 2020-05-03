@@ -42,7 +42,8 @@
                                     <th class="shoping__product">Products</th>
                                     <th>Price</th>
                                     <th>Quantity</th>
-                                    <th>Total</th>
+                                    <th>Action</th>
+                                    <th>Action</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -65,6 +66,9 @@
                                 </td>
                                 <td class="shoping__cart__total">
                                     ${{item.perItemPrice }}
+                                </td>
+                                <td class="shoping__cart__price">
+                                    <button class="btn btn-danger" @click="removeItem(item.product.id)">Remove</button>
                                 </td>
                                 <td class="shoping__cart__item__close">
                                     <span class="icon_close"></span>
@@ -131,11 +135,28 @@ export default {
       }
     },
     methods: {
+        openToast(){
+            this.$toasted.success("Updated Cart !", { 
+                icon : 'cart-plus',
+                theme: "bubble", 
+                position: "top-right", 
+                duration : 3000,
+            });
+        },
         increaseQty(id) {
-            this.$store.dispatch('increaseItem', id)
+            this.$store.dispatch('increaseItem', id).then(() => {
+                this.openToast()
+            })
         },
         decreaseQty(id) {
-            this.$store.dispatch('decreaseItem', id)
+            this.$store.dispatch('decreaseItem', id).then(() => {
+                this.openToast()
+            })
+        },
+        removeItem(id) {
+            this.$store.dispatch('removeItem', id).then(() => {
+                this.openToast()
+            })
         }
     },
     computed: {

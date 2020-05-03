@@ -43,6 +43,10 @@ export default new Vuex.Store({
         product.quantity--
         product.perItemPrice = product.quantity * product.product.price
       }
+    },
+    REMOVE_CART_ITEM(state, id) {
+        const index = state.cart.findIndex(item => item.product.id == id)
+        state.cart.splice(index, 1);
     }
   },
   actions: {
@@ -63,6 +67,9 @@ export default new Vuex.Store({
     },
     decreaseItem({commit}, id) {
       commit('DECREASE_CART_ITEM', id)
+    },
+    removeItem({commit}, id) {
+      commit('REMOVE_CART_ITEM', id)
     }
   },
   getters: {

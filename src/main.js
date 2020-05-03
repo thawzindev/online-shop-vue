@@ -6,8 +6,15 @@ import router from './router'
 import store from './store'
 import { BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import '../node_modules/nprogress/nprogress.css'
+import Toasted from 'vue-toasted'
+
 
 Vue.config.productionTip = false
+
+Vue.use(Toasted, {
+  duration: 3000,
+  iconPack : 'fontawesome' 
+})
 
 const requireComponent = require.context(
   './components',
