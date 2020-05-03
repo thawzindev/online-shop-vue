@@ -30,12 +30,11 @@
                     </content-loader>
                 </div> -->
 
-                <!-- <div class="col-lg-12" v-if="noItemInCart">
+                <div class="col-lg-12" v-if="isEmpty">
                     <img src="https://www.redufy.com/img/png/empty-cart.png" class="mx-auto d-block" alt="">
-                </div> -->
+                </div>
 
-                <div class="col-lg-12">
-                      <!-- {{items}} -->
+                <div class="col-lg-12" v-if="!isEmpty">
                     <div class="shoping__cart__table">
                         <table>
                             <thead>
@@ -50,22 +49,22 @@
                             <tbody>
                             <tr v-for="item in items" :key="item.id">
                                 <td class="shoping__cart__item">
-                                    <img :src="item.product_image" alt="">
-                                    <h5>{{item.product_name}}</h5>
+                                    <img :src="item.product.product_image" alt="">
+                                    <h5>{{item.product.product_name}}</h5>
                                 </td>
                                 <td class="shoping__cart__price">
-                                    ${{item.price}}
+                                    ${{item.product.price}}
                                 </td>
                                 <td class="shoping__cart__quantity">
                                     <div class="quantity">
                                         <div class="pro-qty">
-                                            <span class="dec qtybtn" @click="decreaseQty(item.id)">-</span>
+                                            <span class="dec qtybtn" @click="decreaseQty(item.product.id)">-</span>
                                                 <input type="text" :value="item.quantity">
-                                            <span class="inc qtybtn" @click="increaseQty(item.id)">+</span></div>
+                                            <span class="inc qtybtn" @click="increaseQty(item.product.id)">+</span></div>
                                     </div>
                                 </td>
                                 <td class="shoping__cart__total">
-                                    ${{item.perProductPrice }}
+                                    ${{item.perItemPrice }}
                                 </td>
                                 <td class="shoping__cart__item__close">
                                     <span class="icon_close"></span>
@@ -77,7 +76,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" v-if="initialized">
+            <div class="row" v-if="!isEmpty">
                 <div class="col-lg-6">
                     <div class="shoping__cart__btns">
                         <router-link :to="{ name: 'Shop' }" class="primary-btn cart-btn">CONTINUE SHOPPING</router-link>
@@ -102,7 +101,6 @@
                             <li>Discount <span>$0</span></li>
                             <li>Total <span>${{totalPrice}}</span></li>
                         </ul>
-                        <!-- <a href="#" class="primary-btn">PROCEED TO CHECKOUT</a> -->
                         <router-link class="primary-btn" :to="{ name: 'check-out' }">PROCEED TO CHECKOUT</router-link>
                     </div>
                 </div>
@@ -117,9 +115,9 @@
 
 <script>
 import BreadCrumb from '@/components/BreadCrumb.vue'
-import ProductService from '@/services/ProductService.js'
+// import ProductService from '@/services/ProductService.js'
 // import { ContentLoader  } from 'vue-content-loader'
-// import { mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 
 export default {
     components: {
@@ -134,30 +132,23 @@ export default {
     },
     methods: {
         increaseQty(id) {
-            this.$store.dispatch('increaseItem', id).then(() => {
-            })
+            this.$store.dispatch('increaseItem', id)
         },
         decreaseQty(id) {
-            this.$store.dispatch('decreaseItem', id).then(() => {   
-            })
+            this.$store.dispatch('decreaseItem', id)
         }
     },
     computed: {
+
+        ...mapGetters({
         // map `this.doneCount` to `this.$store.getters.doneTodosCount`
-        items: function () {
-            return this.$store.getters.cartItems.map(function (item) {
-                ProductService.getProduct(item.id).then(response => {
-                    item.price = response.data.price
-                    item.product_image = response.data.product_image
-                    item.product_name = response.data.product_name
-                    item.perProductPrice = Math.round(item.quantity * response.data.price).toFixed(3) 
-                })
-                return item
-            })
-        },
-        
+            items: 'cartItems'
+        }),
         totalPrice: function () {
-            return this.items.reduce((a, item) => +a + +item.perProductPrice, 0).toFixed(3)
+            return this.items.reduce((a, item) => +a + +item.perItemPrice, 0).toFixed(3)
+        },
+        isEmpty: function() {
+            return this.items.length === 0 ? true : false
         }
         
     },

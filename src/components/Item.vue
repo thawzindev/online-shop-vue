@@ -5,7 +5,7 @@
             <ul class="product__item__pic__hover">
                 <li><a href="#"><i class="fa fa-heart"></i></a></li>
                 <li><a href="#" @click.prevent="detail"><i class="fa fa-eye"></i></a></li>
-                <li><a href="#" @click.prevent="addToCart(product.id, 1)"><i class="fa fa-shopping-cart"></i></a></li>
+                <li><a href="#" @click.prevent="addToCart(product, 1)"><i class="fa fa-shopping-cart"></i></a></li>
             </ul>
         </div>
         <div class="product__item__text">
@@ -28,9 +28,8 @@ export default {
     detail() {
       this.$router.push({ name: 'product-show', params: { id: this.product.id } })
     },
-    addToCart(id, quantity = 1) {
-        const payload = {id, quantity}
-        console.log(payload)
+    addToCart(product, quantity = 1) {
+        const payload = {product, quantity}
         store.dispatch('addToCard', payload)
     },
   },
