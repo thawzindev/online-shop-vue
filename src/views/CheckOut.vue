@@ -163,7 +163,7 @@ export default {
 
                 if (response.status == 200) {
                     this.$store.dispatch('clearCart').then(() => {
-                        this.$router.push({ name: 'Complete', params: { userId: '123' } })
+                        this.$router.push({ name: 'Complete', params: { message: 'success' } })
                     })
                 }
             })
