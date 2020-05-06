@@ -36,5 +36,20 @@ const instance = axios.create({
       },
       getProductsByCategory(page, id) {
           return instance.get('category/' + id + '/all-products?page=' + page)
+      },
+      checkOut(payload, products) {
+        return instance.post('checkout', {
+                name : payload.name,
+                address : payload.address,
+                apartment : payload.apartment,
+                township : payload.township,
+                phone : payload.phone,
+                email : payload.email,
+                create_account : payload.create_account,
+                account_pw : payload.account_pw,
+                notes : payload.notes,
+                cash_on_delivery : payload.cash_on_delivery,
+                products
+        })
       }
   }

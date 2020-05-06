@@ -8,56 +8,55 @@
                     </h6>
                 </div>
             </div> -->
-            <div class="checkout__form">
+
+            <div class="col-lg-12" v-if="isEmpty">
+                    <img src="https://www.redufy.com/img/png/empty-cart.png" class="mx-auto d-block" alt="">
+            </div>
+
+            <div class="checkout__form" v-if="!isEmpty">
                 <h4>Billing Details</h4>
-                <form action="#">
+                <form action="#" @submit.prevent="submit">
                     <div class="row">
-                        <div class="col-lg-8 col-md-6">
+                        <div class="col-lg-7 col-md-6">
                             <div class="row">
-                                <div class="col-lg-6">
+                                <div class="col-lg-12">
                                     <div class="checkout__input">
-                                        <p>Fist Name<span>*</span></p>
-                                        <input type="text">
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="checkout__input">
-                                        <p>Last Name<span>*</span></p>
-                                        <input type="text">
+                                        <p>Name<span>*</span></p>
+                                        <input type="text" placeholder="Name" v-model="inputs.name">
                                     </div>
                                 </div>
                             </div>
                             <div class="checkout__input">
                                 <p>Address<span>*</span></p>
-                                <input type="text" placeholder="Street Address" class="checkout__input__add">
-                                <input type="text" placeholder="Apartment, suite, unite ect (optinal)">
+                                <input type="text" placeholder="Street Address" class="checkout__input__add" v-model="inputs.address">
+                                <input type="text" placeholder="Aspartment, suite, unite ect (optinal)" v-model="inputs.apartment">
                             </div>
                             <div class="checkout__input">
                                 <p>Town/City<span>*</span></p>
-                                <input type="text">
+                                <input type="text" v-model="inputs.township">
                             </div>
-                            <div class="checkout__input">
+                            <!-- <div class="checkout__input">
                                 <p>Country/State<span>*</span></p>
                                 <input type="text">
-                            </div>
+                            </div> -->
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Phone<span>*</span></p>
-                                        <input type="text">
+                                        <input type="text" v-model="inputs.phone">
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="checkout__input">
                                         <p>Email<span>*</span></p>
-                                        <input type="text">
+                                        <input type="email" v-model="inputs.email">
                                     </div>
                                 </div>
                             </div>
                             <div class="checkout__input__checkbox">
                                 <label for="acc">
                                     Create an account?
-                                    <input type="checkbox" id="acc">
+                                    <input type="checkbox" id="acc" v-model="inputs.create_account">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
@@ -65,7 +64,7 @@
                                 please login at the top of the page</p>
                             <div class="checkout__input">
                                 <p>Account Password<span>*</span></p>
-                                <input type="text">
+                                <input type="password" v-model="inputs.account_pw">
                             </div>
                             <!-- <div class="checkout__input__checkbox">
                                 <label for="diff-acc">
@@ -76,20 +75,18 @@
                             </div> -->
                             <div class="checkout__input">
                                 <p>Order notes<span>*</span></p>
-                                <input type="text" placeholder="Notes about your order, e.g. special notes for delivery.">
+                                <input type="text" placeholder="Notes about your order, e.g. special notes for delivery." v-model="inputs.notes">
                             </div>
                         </div>
-                        <div class="col-lg-4 col-md-6">
+                        <div class="col-lg-5 col-md-6">
                             <div class="checkout__order">
                                 <h4>Your Order</h4>
                                 <div class="checkout__order__products">Products <span>Total</span></div>
                                 <ul>
-                                    <li>Vegetable’s Package <span>$75.99</span></li>
-                                    <li>Fresh Vegetable <span>$151.99</span></li>
-                                    <li>Organic Bananas <span>$53.99</span></li>
+                                    <li v-for="item in items" :key="item.id">{{item.product.product_name }} x {{item.quantity}} <span>$ {{ item.perItemPrice }}</span></li>
                                 </ul>
-                                <div class="checkout__order__subtotal">Subtotal <span>$750.99</span></div>
-                                <div class="checkout__order__total">Total <span>$750.99</span></div>
+                                <div class="checkout__order__subtotal">Subtotal <span>${{totalPrice}}</span></div>
+                                <div class="checkout__order__total">Total <span>${{totalPrice}}</span></div>
                                 <!-- <div class="checkout__input__checkbox">
                                     <label for="acc-or">
                                         Create an account?
@@ -108,7 +105,7 @@
                                 <div class="checkout__input__checkbox">
                                     <label for="paypal">
                                         Cash On Delivery
-                                        <input type="checkbox" id="paypal">
+                                        <input type="checkbox" id="paypal" v-model="inputs.cash_on_delivery">
                                         <span class="checkmark"></span>
                                     </label>
                                 </div>
@@ -124,52 +121,70 @@
 </template>
 
 <script>
-// import ProductService from '@/services/ProductService.js'
-// export default {
-//     data() {
-//       return {
-//           items: [],
-//           totalPrice : 0,
-//           initialValue : 0,
-//           initialized: false,
-//           info: this.freshInfo(),
-//       }
-//     },
-//     methods: {
-//         freshInfo() {
-//             return {
-//                 name : '',
-//                 phone : '',
-//                 address : '',
-//                 payment_type : '',
-//             }
-//         },
-//         addUserInfo() {
-//             console.log(this.info.name)
-//             this.$router.push({ name: 'payment-confirm', params: { userInfo: this.info } })
-//         }
-//     },
-//     created() {   
-//       const products = this.$store.getters.cartItems
-//       products.map(
-//         item => ProductService.getProduct(item.id)
-//         .then(response => {
-//             response.data.quantity = item.quantity
-//             response.data.perProductPrice = Math.round(item.quantity * response.data.price).toFixed(3)
-//             this.items.push(response.data);
-//         })
-//         .then(() => {
-//           this.totalPrice = this.items.reduce((a, item) => +a + +item.perProductPrice, 0).toFixed(3)
-//         })
-//         .then(() => {
-//           this.initialized = true
-//         })
-//         .catch(err => {
-//             console.log(err);
-//         })
-//       )
-//     },
-// }
+
+import ProductService from '@/services/ProductService.js'
+import { mapGetters } from 'vuex'
+// import _ from 'lodash' 
+
+export default {
+    data() {
+        return {
+        inputs : this.createFreshObj(),
+        }
+    },
+    methods: {
+        createFreshObj() {
+          return {
+              name : '',
+              address : '',
+              apartment : '',
+              township : '',
+              phone : '',
+              email : '',
+              create_account : false,
+              account_pw : '',
+              notes : '',
+              cash_on_delivery : true,
+          }
+      },
+      submit() {
+
+          const products = []
+          this.items.forEach(function(item) {
+              const product = {
+                  id : item.product.id,
+                  quantity : item.quantity
+              }
+
+              products.push(product)
+          })
+
+          ProductService.checkOut(this.inputs, products).then(response => {
+
+                if (response.status == 200) {
+                    this.$store.dispatch('clearCart').then(() => {
+                        this.$router.push({ name: 'Complete', params: { userId: '123' } })
+                    })
+                }
+            })
+            .catch(err => {
+                console.log(err)
+            })
+        }
+    },
+    computed: {
+        ...mapGetters({
+            items: 'cartItems'
+        }),
+        totalPrice: function () {
+            return this.items.reduce((a, item) => +a + +item.perItemPrice, 0).toFixed(2)
+        },
+        isEmpty: function() {
+            return this.items.length === 0 ? true : false
+        }
+        
+    },
+}
 </script>
 
 <style scoped>

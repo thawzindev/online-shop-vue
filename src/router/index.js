@@ -10,6 +10,7 @@ import PaymentConfirm from "../views/PaymentConfirm.vue";
 import Cart from "../views/Cart.vue";
 import ContactUs from "../views/ContactUs.vue";
 import Blog from "../views/Blog.vue";
+import Complete from "../views/Complete.vue";
 
 Vue.use(VueRouter);
 
@@ -29,6 +30,12 @@ const routes = [
     path: "/cart",
     name: "Cart",
     component: Cart,
+    props: true,
+  },
+  {
+    path: "/success-order",
+    name: "Complete",
+    component: Complete,
     props: true,
   },
   {

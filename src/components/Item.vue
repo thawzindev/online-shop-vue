@@ -10,7 +10,7 @@
         </div>
         <div class="product__item__text">
             <h6><a href="#">Crab Pool Security</a></h6>
-            <h5>$30.00</h5>
+            <h5>${{product.price}}</h5>
         </div>
     </div>
   </div>
