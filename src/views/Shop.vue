@@ -6,22 +6,30 @@
             <div class="row">
                 <div class="col-lg-3 col-md-5">
                     <div class="sidebar">
-                        <div class="sidebar__item">
-                            <h4>Department</h4>
+                        <div class="sidebar__item" v-if="categoryInitialized">
+                            <h4>Category</h4>
                             <ul>
-                                <li><a href="#">Fresh Meat</a></li>
-                                <li><a href="#">Vegetables</a></li>
-                                <li><a href="#">Fruit &amp; Nut Gifts</a></li>
-                                <li><a href="#">Fresh Berries</a></li>
-                                <li><a href="#">Ocean Foods</a></li>
-                                <li><a href="#">Butter &amp; Eggs</a></li>
-                                <li><a href="#">Fastfood</a></li>
-                                <li><a href="#">Fresh Onion</a></li>
-                                <li><a href="#">Papayaya &amp; Crisps</a></li>
-                                <li><a href="#">Oatmeal</a></li>
+                                <li><a href="#" @click.prevent="getAll" :class="{ activeCate: categoryId == 0}">All</a></li>
+                                <li v-for="category in categories" :key="category.id">
+                                    <a href="#" @click.prevent="getProductByCategory(category.id)" :class="{ activeCate: category.id === categoryId}">{{ category.name_en }}</a>
+                                </li>
                             </ul>
                         </div>
-                        <div class="sidebar__item">
+
+                        <div class="sidebar__item" v-if="!categoryInitialized">
+                              <content-loader
+                                width="250"
+                                height="250">
+                                <rect x="22" y="49" rx="0" ry="0" width="198" height="20" /> 
+                                <rect x="26" y="90" rx="0" ry="0" width="165" height="10" /> 
+                                <rect x="27" y="121" rx="0" ry="0" width="165" height="9" /> 
+                                <rect x="27" y="150" rx="0" ry="0" width="165" height="8" /> 
+                                <rect x="28" y="176" rx="0" ry="0" width="165" height="9" /> 
+                                <rect x="25" y="206" rx="0" ry="0" width="165" height="10" /> 
+                                <rect x="25" y="235" rx="0" ry="0" width="165" height="9" />
+                            </content-loader>
+                        </div>
+                        <!-- <div class="sidebar__item">
                             <h4>Price</h4>
                             <div class="price-range-wrap">
                                 <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content" data-min="10" data-max="540">
@@ -36,7 +44,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="sidebar__item sidebar__item__color--option">
                             <h4>Colors</h4>
                             <div class="sidebar__item__color sidebar__item__color--white">
@@ -316,17 +324,17 @@
                             <div class="col-lg-6 col-md-5">
                                 <div class="filter__sort">
                                     <span>Sort By</span>&nbsp;
-                                    <select>
-                                        <option value="0">All</option>
-                                        <option value="0">Price</option>
-                                        <option value="0">Porpularity</option>
+                                    <select name="sort_by" @change="sortBy">
+                                        <option value="all">All</option>
+                                        <option value="price">Price</option>
+                                        <option value="popularity">Porpularity</option>
                                     </select>
                                     <!-- <div class="nice-select" tabindex="0"><span class="current">Default</span><ul class="list"><li data-value="0" class="option">Default</li><li data-value="0" class="option selected focus">Default</li></ul></div> -->
                                 </div>
                             </div>
                             <div class="col-lg-6 col-md-4">
                                 <div class="filter__found">
-                                    <h6><span>16</span> Products found</h6>
+                                    <h6><span>{{this.meta_data.total}}</span> Products found</h6>
                                 </div>
                             </div>
                         </div>
@@ -395,6 +403,8 @@ import Item from '@/components/Item.vue'
 import BreadCrumb from '@/components/BreadCrumb.vue'
 import ProductService from '@/services/ProductService.js'
 import { ContentLoader  } from 'vue-content-loader'
+import _ from 'lodash'
+
 export default {
     components: {
         Item,
@@ -406,22 +416,51 @@ export default {
             products: [],
             categories: [],
             page: 1,
-            count: Number,
+            categoryId: 0,
             limit: 0,
             meta_data: Object,
-            initialized: false
+            initialized: false,
+            categoryInitialized: false,
+            categorySearch : false,
+            is_active: false,
         }
     },
     methods: {
         callPage(page=1) {
-            console.log("called" + page)
-            ProductService.getProducts(page)
+            if (!this.categorySearch) {
+                ProductService.getProducts(page)
+                .then(response => { 
+                    this.meta_data = response.data.meta
+                    this.products = response.data.data
+                })
+                .then(() => {
+                    this.initialized = true
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            } else  {
+                console.log(page)
+                ProductService.getProductsByCategory(page, this.categoryId)
+                .then(response => { 
+                    console.log(response)
+                    this.meta_data = response.data.meta
+                    this.products = response.data.data
+                })
+                .then(() => {
+                    this.initialized = true
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+            }
+        },
+        getProductsByCategory(categoryId) {
+            console.log('called' + categoryId)
+            ProductService.getProductsByCategory(1, categoryId)
             .then(response => { 
-                this.meta_data = response.data.meta
-                this.products = response.data.data
-            })
-            .then(() => {
-                this.initialized = true
+               this.products = response.data.data
+               this.meta_data = response.data.meta
             })
             .catch(err => {
                 console.log(err);
@@ -432,9 +471,30 @@ export default {
             .then(response => {
                 this.categories = response.data.data
             })
+            .then(() => {
+                this.categoryInitialized = true
+            })
             .catch(err => {
                 console.log(err)
             })
+        },
+        getProductByCategory(id) {
+            this.categoryId = id
+            this.categorySearch = true
+            this.getProductsByCategory(id)
+        },
+        getAll() {
+            this.categoryId = 0
+            this.categorySearch = false
+            this.callPage()
+        },
+        sortBy(event) {
+            if (event.target.value == 'all') {
+                this.products = _.orderBy(this.products, ['id'], ['desc'])
+            }
+            else if (event.target.value == 'price') {
+                this.products = _.orderBy(this.products, ['price'], ['desc']);
+            }
         }
     },
     created() {
@@ -450,5 +510,11 @@ export default {
         text-decoration: none;
         outline: none;
         background-color: #7fad39;
+    }
+    a:hover {
+        color: green;
+    }
+    .activeCate {
+        color:#7fad39;
     }
 </style>

@@ -59,7 +59,7 @@
                                 <span class="inc qtybtn" @click.prevent="qtyIncrease">+</span></div>
                             </div>
                         </div>
-                        <a href="#" class="primary-btn" @click.prevent="addToCard(product.id, quantity)">ADD TO CARD</a>
+                        <a href="#" class="primary-btn" @click.prevent="addToCard(product, quantity)">ADD TO CARD</a>
                         <a href="#" class="heart-icon"><span class="icon_heart_alt"></span></a>
                         <ul>
                             <li><b>Availability</b> <span>{{ product.in_stock == 1 ? 'in stock' : 'out of stock'}}</span></li>
@@ -141,9 +141,19 @@ export default {
         })
     },
     methods: {
-        addToCard(id, quantity = 0) {
-            const payload = {id, quantity}
-            store.dispatch('addToCard', payload)
+        openToast(){
+            this.$toasted.success("added !", { 
+                icon : 'cart-plus',
+                theme: "bubble", 
+                position: "top-right", 
+                duration : 3000,
+            });
+        },
+        addToCard(product, quantity = 1) {
+        const payload = {product, quantity}
+            store.dispatch('addToCard', payload).then(() => {
+                this.openToast()
+            })
         },
         qtyReduce() {
             if (this.quantity !== 1) {

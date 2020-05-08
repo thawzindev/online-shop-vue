@@ -12,7 +12,6 @@ export default new Vuex.Store({
     ADD_TO_CART(state, payload) {
 
       const checkProduct = state.cart.find( (product) => product.product.id === payload.product.id )
-    
       if (checkProduct) {
         console.log("old item existed")
         checkProduct.quantity+= payload.quantity
@@ -20,6 +19,7 @@ export default new Vuex.Store({
       }
       else {
         console.log("new")
+        console.log(payload)
         const newItem = {
             product: payload.product,
             quantity: payload.quantity,

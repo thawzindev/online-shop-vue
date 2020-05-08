@@ -25,6 +25,9 @@ const instance = axios.create({
       getProducts(page) {
           return instance.get('products'+'?page='+page)
       },  
+      getBlog(page) {
+        return instance.get('blogs'+'?page='+page)
+    },  
       getProduct(id) {
           return  instance.get('product/' + id )
       },

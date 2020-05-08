@@ -26,8 +26,6 @@
                             <div class="blog__sidebar__recent">
                                 <!-- recent blogs start -->
                                 <RecentBlog/>
-                                <RecentBlog/>
-                                <RecentBlog/>
                                 <!-- end of recent blog -->
                             </div>
                         </div>
@@ -47,11 +45,8 @@
                 <div class="col-lg-8 col-md-7">
                     <div class="row">
                         <!-- Blog Items -->
-
-                        <BlogItem/>
-                        <BlogItem/>
-                        <BlogItem/>
-                        <BlogItem/>
+                        <!-- {{blogs}} -->
+                        <BlogItem v-for="(blog,key) in blogs" :key="key" :blog="blog"/>
 
                         <!-- End Blog Items -->
                         
@@ -75,10 +70,33 @@
 <script>
 import BlogItem from '@/components/BlogItem.vue'
 import RecentBlog from '@/components/RecentBlog.vue'
+import ProductService from '@/services/ProductService.js'
+
 export default {
     components: {
         BlogItem,
         RecentBlog
-    }
+    },
+    data() {
+        return {
+            blogs: [],
+            meta_data: Object,
+        }
+    },
+    methods: {
+        getBlog(page=1) {
+            ProductService.getBlog(page)
+            .then(response => { 
+               this.blogs = response.data.data.data
+               this.meta_data = response.data.data.meta
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        },
+    },
+    created() {
+        this.getBlog()
+    },
 }
 </script>
