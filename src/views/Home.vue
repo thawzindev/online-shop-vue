@@ -8,7 +8,7 @@
                     <div class="section-title">
                         <h2>Featured Product</h2>
                     </div>
-                    <div class="featured__controls">
+                    <!-- <div class="featured__controls">
                         <ul>
                             <li class="active mixitup-control-active" data-filter="*">All</li>
                             <li data-filter=".oranges" class="">Oranges</li>
@@ -16,30 +16,41 @@
                             <li data-filter=".vegetables" class="">Vegetables</li>
                             <li data-filter=".fastfood" class="">Fastfood</li>
                         </ul>
-                    </div>
+                    </div> -->
                 </div>
             </div>
             <div class="row featured__filter" id="MixItUpAFF3CE" style="">
-       
-            <FeatureProduct/>
-            <FeatureProduct/>
-            <FeatureProduct/>
-            <FeatureProduct/>
-            <FeatureProduct/>
-            <FeatureProduct/>
-            <FeatureProduct/>
-            <FeatureProduct/>
+                    
+            <FeatureProduct v-for="(product,key) in featureProds" :key="key" :product="product"/>
+
           </div>
         </div>
     </section>
-        <Banner/>
-        <Blog/>
+            <Banner/>
+
+        <section class="from-blog spad">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="section-title from-blog__title">
+                            <h2>From The Blog</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    
+                    <Blog v-for="(blog,key) in featureBlogs" :key="key" :blog="blog"/>
+                    
+                </div>
+            </div>
+        </section>
     </div>
 </template>
 
 <script>
 import HeroSection from '@/components/HeroSection.vue'
 // import CategorySection from '@/components/CategorySection.vue'
+import ProductService from '@/services/ProductService.js'
 import FeatureProduct from '@/components/FeatureProduct.vue'
 import Banner from '@/components/Banner.vue'
 import Blog from '@/components/Blog.vue'
@@ -50,61 +61,42 @@ export default {
         FeatureProduct,
         Banner,
         Blog
+    },  
+    data() {
+        return {
+            featureProds: [],
+            featureBlogs: [],
+            initialized : false,
+        }
     },
-    // data() {
-    //     return {
-    //         products: [],
-    //         categories: [],
-    //         page: 1,
-    //         count: Number,
-    //         limit: 0,
-    //     }
-    // },
-    // methods: {
-    //     callItems(page=1) {
-    //         ProductService.getProducts(page)
-    //         .then(response => { 
-    //             if (this.products.length == 0) {
-    //                 this.products = response.data.data;
-    //             } else {
-    //                 if (response.data.data.length == 0) {
-    //                     this.limit = 1
-    //                     console.log('ended')
-    //                 }
-    //                 this.products.push(...response.data.data)
-    //             }
-    //         })
-    //         .catch(err => {
-    //             console.log(err);
-    //         })
-    //     },
-    //     getCategories() {
-    //         ProductService.getCategories()
-    //         .then(response => {
-    //             this.categories = response.data.data
-    //         })
-    //         .catch(err => {
-    //             console.log(err)
-    //         })
-    //     }
-    // },
-    // created() {
-    //     this.getCategories()
-    //     this.callItems()
-    // },
-    // mounted() {
-    //     window.onscroll = () => {
-    //     let bottomOfWindow = document.documentElement.scrollTop + window.innerHeight === document.documentElement.offsetHeight;
-
-    //     if (bottomOfWindow  && this.limit != 1) {
-    //         this.page++
-    //         this.callItems(this.page)
-            
-    //         console.log('called'+ this.page )
-    //     }
-    //     };
- 
-    // },
+    methods: {
+        featureProducts() {
+            ProductService.getFeatureProducts().then(response => {
+                this.featureProds = response.data.data
+            })
+            .then(() => {
+                    this.initialized = true
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        },  
+        featureBlgs() {
+            ProductService.getFeatureBlogs().then(response => {
+                this.featureBlogs = response.data.data
+            })
+            .then(() => {
+                    this.initialized = true
+            })
+            .catch(err => {
+                console.log(err);
+            })
+        }
+    },
+    created() {
+        this.featureProducts()
+        this.featureBlgs()
+    },
 }
 
 </script>

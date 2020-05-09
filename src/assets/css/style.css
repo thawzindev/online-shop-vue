@@ -142,8 +142,8 @@ ol {
 }
 
 .spad {
-	padding-top: 100px;
-	padding-bottom: 100px;
+	padding-top: 45px;
+	padding-bottom: 70px;
 }
 
 .text-white h1,
@@ -2318,13 +2318,18 @@ ol {
 
 .blog__item__text .blog__btn {
 	display: inline-block;
-	font-size: 14px;
+	font-size: 11px;
 	color: #1c1c1c;
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	border: 1px solid #b2b2b2;
 	padding: 14px 20px 12px;
 	border-radius: 25px;
+}
+
+.blog__item__text .blog__btn:hover {
+	color: green;
+	font-weight: bold;
 }
 
 .blog__item__text .blog__btn span {
@@ -2354,7 +2359,7 @@ ol {
 -----------------------*/
 
 .blog__sidebar {
-	padding-top: 50px;
+	padding-top: 0px;
 }
 
 .blog__sidebar__item {

@@ -11,6 +11,7 @@ import Cart from "../views/Cart.vue";
 import ContactUs from "../views/ContactUs.vue";
 import Blog from "../views/Blog.vue";
 import Complete from "../views/Complete.vue";
+import Login from "../views/Login.vue";
 
 Vue.use(VueRouter);
 
@@ -81,6 +82,12 @@ const routes = [
     props: true,
   },
   {
+    path: "/login",
+    name: "login",
+    component: Login,
+    props: true,
+  },
+  {
     path: "*",
     redirect: '/404'
   }
@@ -88,7 +95,15 @@ const routes = [
 
 const router = new VueRouter({
   routes,
-  mode: 'history'
+  mode: 'history',
+  scrollBehavior (to, from, savedPosition) {
+    console.log(from,to)
+    if (savedPosition) {
+      return savedPosition
+    } else {
+      return { x: 0, y: 0  }
+    }
+  }
 });
 
 export default router;
