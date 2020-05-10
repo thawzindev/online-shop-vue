@@ -4,7 +4,7 @@
         <div class="featured__item">
             <div class="featured__item__pic set-bg" data-setbg="img/product/product-4.jpg" :style="{ backgroundImage: `url('${product.product_image}')` }">
                 <ul class="featured__item__pic__hover">
-                    <li><a href="#"><i class="fa fa-heart"></i></a></li>
+                    <li><a href="#" @click.prevent="addToWishList(product)"><i class="fa fa-heart"></i></a></li>
                     <li><a href="#" @click.prevent="detail"><i class="fa fa-eye"></i></a></li>
                     <li><a href="#" @click.prevent="addToCart(product, 1)"><i class="fa fa-shopping-cart"></i></a></li>
                 </ul>
@@ -20,14 +20,15 @@
 
 <script>
     import store from '@/store/index.js'
+    import ProductService from '@/services/ProductService.js'
 
     export default {
     props: {
         product: Object
     },
     methods: {
-        openToast(){
-            this.$toasted.success("added !", { 
+        openToast(text){
+            this.$toasted.success(text, { 
                 icon : 'cart-plus',
                 theme: "bubble", 
                 position: "top-right", 
@@ -40,9 +41,21 @@
         addToCart(product, quantity = 1) {
             const payload = {product, quantity}
             store.dispatch('addToCard', payload).then(() => {
-            this.openToast()
+            this.openToast('Added to Cart !')
             })
         },
+        addToWishList(product) {
+        const token = this.$store.getters.token
+        ProductService.addToWishList(product.id, token).then(response => {
+          this.$store.commit('wishListUpdate', response.data.count)
+        })
+        .then(() => {
+          this.openToast('Added to wishlist !')
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
     },
     }
 </script>

@@ -11,6 +11,9 @@ const instance = axios.create({
     }
   });
 
+  instance.defaults.withCredentials = true;
+
+
   instance.interceptors.request.use(config => {
     NProgress.start()
     return config
@@ -25,8 +28,25 @@ const instance = axios.create({
       getProducts(page) {
           return instance.get('products'+'?page='+page)
       },  
+      login(payload) {
+        return instance.post('login', { 
+          phone : payload.phone,
+          password : payload.password
+        }
+        )
+      },  
+      addToWishList(productId, token) {
+        return instance.post('add-wishlist', { 
+          product_id : productId,
+        },
+        { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+      },  
       getFeatureProducts() {
         return instance.get('feature-products')
+      },  
+      csrf() {
+        return instance.get('csrf-cookie')
       },  
       getBlog(page) {
         return instance.get('blogs'+'?page='+page)

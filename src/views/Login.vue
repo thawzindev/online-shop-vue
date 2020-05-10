@@ -14,7 +14,13 @@
             </div> -->
 
     <div class="checkout__form">
+
         <h4>Login</h4>
+
+        <div class="alert alert-danger" role="alert" v-if="this.error">
+            {{ error }}
+        </div>
+
         <form action="#" @submit.prevent="submit">
             <div class="row">
                 <div class="col-lg-7 col-md-6">
@@ -23,7 +29,7 @@
                     <div class="col-lg-12">
                         <div class="checkout__input">
                             <p>Phone<span>*</span></p>
-                            <input type="text" placeholder="Name" v-model="inputs.phone" :class="{ error : $v.inputs.phone.$error }" @blur="$v.inputs.phone.$touch()">
+                            <input type="number" placeholder="Name" v-model="inputs.phone" :class="{ error : $v.inputs.phone.$error }" @blur="$v.inputs.phone.$touch()">
                         </div>
 
                         <div v-if="$v.inputs.phone.$error">
@@ -56,16 +62,16 @@
 
 <script>
 
-// import ProductService from '@/services/ProductService.js'
+import ProductService from '@/services/ProductService.js'
 import { mapGetters } from 'vuex'
 import { required, minLength  } from 'vuelidate/lib/validators'
-// import bcrypt from 'bcrypt'
+import NProgress from 'nprogress';
 
-// import _ from 'lodash' 
 
 export default {
     data() {
         return {
+        error : '',
         inputs : this.createFreshObj(),
         }
     },
@@ -89,17 +95,22 @@ export default {
         this.$v.$touch()
 
         if (this.$v.$invalid) {
-              alert("ERR")
+              this.error = "Please fill out phone no & password."
         } 
         else {
-            // bcrypt.hash(this.inputs.password, 10, function(err, hash) {
-            //     if (err) {
-            //         console.log(err)
-            //     } else {
-            //         console.log(hash)
-            //     }
-            // });
-        }
+            ProductService.csrf().then(res => {
+                console.log("csrf"+ res)
+                ProductService.login(this.inputs).then(response => {
+                    this.$store.commit('login', response.data)
+                    this.$store.commit('wishListUpdate', response.data.wishList)
+                    this.$router.push({ path: '/' })
+                })
+                .catch(err => {
+                    NProgress.done(true)
+                    this.error = err.response.data.error
+                }) 
+            })
+            }
         }
     },
     computed: {

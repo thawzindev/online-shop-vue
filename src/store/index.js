@@ -6,9 +6,22 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    cart: []
+    cart: [],
+    user: {},
+    wishList: 0,
   },
   mutations: {
+
+    login (state, payload) {
+      state.user = payload
+    },
+    logout (state) {
+      state.user = {}
+    },
+    wishListUpdate (state, payload) {
+      state.wishList = payload
+    },
+
     ADD_TO_CART(state, payload) {
 
       const checkProduct = state.cart.find( (product) => product.product.id === payload.product.id )
@@ -81,7 +94,13 @@ export default new Vuex.Store({
     },
     cartItems: state => {
       return state.cart
-    }
+    },
+    token: state => {
+      return state.user.token
+    },
+    wishList: state => {
+      return state.wishList
+    },
   },
   modules: {}
 });

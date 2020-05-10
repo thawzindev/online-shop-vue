@@ -29,8 +29,12 @@
                                     <li><a href="#">English</a></li>
                                 </ul>
                             </div>
+                            <div class="header__top__right__social" v-if="checkAuth(authUser)">
+                                <span>{{ authUser.name }}</span>
+                            </div>
                             <div class="header__top__right__auth">
-                                <router-link :to="{ name: 'login'}"><i class="fa fa-user"></i> Login</router-link>
+                                <router-link :to="{ name: 'login'}" v-if="!checkAuth(authUser)"><i class="fa fa-user"></i> Log In </router-link>
+                                <a v-if="checkAuth(authUser)" href="#" @click.prevent="logOut">Log Out</a>
                             </div>
                         </div>
                     </div>
@@ -65,7 +69,7 @@
                 <div class="col-lg-3">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>1</span></a></li>
+                            <li><a href="#"><i class="fa fa-heart"></i> <span>{{ wishList }}</span></a></li>
                             <!-- <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li> -->
                             <li><router-link :to="{ name: 'Cart' }"><i class="fa fa-shopping-bag"></i><span>{{ cartCount }}</span></router-link></li>
                         </ul>
@@ -93,10 +97,22 @@ export default {
         goTopShop() {
             alert("HI")
         },
+        checkAuth(obj) {
+            return Object.keys(obj).length !== 0
+        },
+        logOut() {
+            this.$store.commit('logout')
+        }
     },
     computed: {
         cartCount() {   
             return this.$store.getters.cartCount
+        },
+        authUser() {
+            return this.$store.state.user
+        },
+        wishList() {
+            return this.$store.getters.wishList
         }
     },
 }
