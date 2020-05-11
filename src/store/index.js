@@ -7,16 +7,17 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     cart: [],
-    user: {},
+    isLoggedIn: !!localStorage.getItem("user"),
     wishList: 0,
   },
   mutations: {
 
-    login (state, payload) {
-      state.user = payload
+    login (state) {
+      state.isLoggedIn = true
     },
     logout (state) {
-      state.user = {}
+      state.isLoggedIn = false
+      localStorage.removeItem('user')
     },
     wishListUpdate (state, payload) {
       state.wishList = payload
@@ -100,6 +101,9 @@ export default new Vuex.Store({
     },
     wishList: state => {
       return state.wishList
+    },
+    isLoggedIn: state => {
+      return state.isLoggedIn
     },
   },
   modules: {}

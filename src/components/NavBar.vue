@@ -29,12 +29,12 @@
                                     <li><a href="#">English</a></li>
                                 </ul>
                             </div>
-                            <div class="header__top__right__social" v-if="checkAuth(authUser)">
-                                <span>{{ authUser.name }}</span>
+                            <div class="header__top__right__social" v-if="isLoggedIn">
+                                <span>{{ user.name }}</span> 
                             </div>
                             <div class="header__top__right__auth">
-                                <router-link :to="{ name: 'login'}" v-if="!checkAuth(authUser)"><i class="fa fa-user"></i> Log In </router-link>
-                                <a v-if="checkAuth(authUser)" href="#" @click.prevent="logOut">Log Out</a>
+                                <router-link :to="{ name: 'login'}" v-if="!isLoggedIn"><i class="fa fa-user"></i> Log In </router-link>
+                                <a v-if="isLoggedIn" href="#" @click.prevent="logOut">Log Out</a>
                             </div>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                 </div>
                 <div class="col-lg-6">
                     <nav class="header__menu">
-                        <ul>
+                        <ul>    
                             <li><router-link :to="{ name: 'Home' }">Home</router-link></li>
                             <li><router-link :to="{ name: 'Shop' }">Shop</router-link></li>
                             <!-- <li><a href="#">Pages</a>
@@ -94,15 +94,9 @@ export default {
         }
     },
     methods: {
-        goTopShop() {
-            alert("HI")
-        },
-        checkAuth(obj) {
-            return Object.keys(obj).length !== 0
-        },
         logOut() {
             this.$store.commit('logout')
-        }
+        },
     },
     computed: {
         cartCount() {   
@@ -113,6 +107,13 @@ export default {
         },
         wishList() {
             return this.$store.getters.wishList
+        },
+        isLoggedIn() {
+            return this.$store.getters.isLoggedIn
+        },
+        user() {
+            const user = JSON.parse(localStorage.getItem('user'))
+            return user
         }
     },
 }

@@ -101,8 +101,10 @@ export default {
             ProductService.csrf().then(res => {
                 console.log("csrf"+ res)
                 ProductService.login(this.inputs).then(response => {
-                    this.$store.commit('login', response.data)
+                    // this.$store.commit('login', response.data)
+                    localStorage.setItem("user", JSON.stringify(response.data));
                     this.$store.commit('wishListUpdate', response.data.wishList)
+                    this.$store.commit('login')
                     this.$router.push({ path: '/' })
                 })
                 .catch(err => {
