@@ -7,7 +7,7 @@
                     <div class="col-lg-6">
                         <div class="header__top__left">
                             <ul>
-                                <li><i class="fa fa-envelope"></i> hello@colorlib.com</li>
+                                <li><i class="fa fa-envelope"></i>hello@colorlib.com</li>
                                 <li>Free Shipping for all Order of $99</li>
                             </ul>
                         </div>
@@ -69,8 +69,8 @@
                 <div class="col-lg-3">
                     <div class="header__cart">
                         <ul>
-                            <li><a href="#"><i class="fa fa-heart"></i> <span>{{ wishList }}</span></a></li>
-                            <!-- <li><a href="#"><i class="fa fa-shopping-bag"></i> <span>3</span></a></li> -->
+                            <li><a href="#" @click.prevent="goToWishList"><i class="fa fa-heart"></i> <span>{{ wishList }}</span></a></li>
+
                             <li><router-link :to="{ name: 'Cart' }"><i class="fa fa-shopping-bag"></i><span>{{ cartCount }}</span></router-link></li>
                         </ul>
                         <!-- <div class="header__cart__price">item: <span>$150.00</span></div> -->
@@ -86,6 +86,7 @@
 </template>
 
 <script>
+// import ProductService from '@/services/ProductService.js'
 
 export default {
     data() {
@@ -94,9 +95,24 @@ export default {
         }
     },
     methods: {
+        openToast(text){
+            this.$toasted.error(text, { 
+                icon : 'cart-plus',
+                theme: "bubble", 
+                position: "top-right", 
+                duration : 3000,
+            });
+        },
         logOut() {
             this.$store.commit('logout')
         },
+        goToWishList() {
+            if (this.isLoggedIn) {
+               this.$router.push({ name: 'wishList', params: { userId: '123' } })
+            } else {
+                this.openToast('Need to login !')
+            }
+        }
     },
     computed: {
         cartCount() {   
@@ -105,15 +121,15 @@ export default {
         authUser() {
             return this.$store.state.user
         },
-        wishList() {
-            return this.$store.getters.wishList
-        },
         isLoggedIn() {
             return this.$store.getters.isLoggedIn
         },
         user() {
             const user = JSON.parse(localStorage.getItem('user'))
             return user
+        },
+        wishList() {
+            return this.$store.getters.wishlist
         }
     },
 }

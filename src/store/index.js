@@ -8,7 +8,7 @@ export default new Vuex.Store({
   state: {
     cart: [],
     isLoggedIn: !!localStorage.getItem("user"),
-    wishList: 0,
+    wishList: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).wishList : 0
   },
   mutations: {
 
@@ -24,7 +24,6 @@ export default new Vuex.Store({
     },
 
     ADD_TO_CART(state, payload) {
-
       const checkProduct = state.cart.find( (product) => product.product.id === payload.product.id )
       if (checkProduct) {
         console.log("old item existed")
@@ -96,14 +95,11 @@ export default new Vuex.Store({
     cartItems: state => {
       return state.cart
     },
-    token: state => {
-      return state.user.token
-    },
-    wishList: state => {
-      return state.wishList
-    },
     isLoggedIn: state => {
       return state.isLoggedIn
+    },
+    wishlist: state => {
+      return state.wishList
     },
   },
   modules: {}

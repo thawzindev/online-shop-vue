@@ -12,6 +12,7 @@ import ContactUs from "../views/ContactUs.vue";
 import Blog from "../views/Blog.vue";
 import Complete from "../views/Complete.vue";
 import Login from "../views/Login.vue";
+import WishList from "../views/WishList.vue";
 
 Vue.use(VueRouter);
 
@@ -67,6 +68,12 @@ const routes = [
     path: "/check-out",
     name: "check-out",
     component: CheckOut,
+    props: true,
+  },
+  {
+    path: "/wishlist",
+    name: "wishList",
+    component: WishList,
     props: true,
   },
   {

@@ -44,9 +44,12 @@ export default {
         })
     },
     addToWishList(product) {
-        const token = this.$store.getters.token
+        const token = JSON.parse(localStorage.getItem('user')).token
         ProductService.addToWishList(product.id, token).then(response => {
           this.$store.commit('wishListUpdate', response.data.count)
+          const user = JSON.parse(localStorage.user);
+          user.wishList = response.data.count
+          localStorage.setItem("user", JSON.stringify(user));
         })
         .then(() => {
           this.openToast('Added to wishlist !')

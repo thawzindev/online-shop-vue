@@ -42,6 +42,20 @@ const instance = axios.create({
         { headers: {"Authorization" : `Bearer ${token}`} }
         )
       },  
+      wishlist() {
+        const token = JSON.parse(localStorage.getItem('user')).token
+        return instance.get('wishlist',
+        { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+      },  
+      wishListDelete(id) {
+        const token = JSON.parse(localStorage.getItem('user')).token
+        return instance.post('wishlist/delete', { 
+          id : id,
+        },
+        { headers: {"Authorization" : `Bearer ${token}`} }
+        )
+      },  
       getFeatureProducts() {
         return instance.get('feature-products')
       },  
