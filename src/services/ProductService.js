@@ -64,7 +64,10 @@ const instance = axios.create({
       },  
       getBlog(page) {
         return instance.get('blogs'+'?page='+page)
-      },  
+      },
+      getBlogById(id) {
+        return instance.get('blog/'+ id)
+      },   
       getFeatureBlogs() {
         return instance.get('feature-blogs')
       }, 

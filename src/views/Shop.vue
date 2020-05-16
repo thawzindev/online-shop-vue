@@ -430,6 +430,7 @@ export default {
             if (!this.categorySearch) {
                 ProductService.getProducts(page)
                 .then(response => { 
+                    console.log(response)
                     this.meta_data = response.data.meta
                     this.products = response.data.data
                 })

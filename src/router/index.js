@@ -13,6 +13,7 @@ import Blog from "../views/Blog.vue";
 import Complete from "../views/Complete.vue";
 import Login from "../views/Login.vue";
 import WishList from "../views/WishList.vue";
+import BlogDetail from "../views/BlogDetail.vue";
 
 Vue.use(VueRouter);
 
@@ -26,6 +27,12 @@ const routes = [
     path: "/shop",
     name: "Shop",
     component: Shop,
+    props: true,
+  },
+  {
+    path: "/blog/:id/detail",
+    name: "BlogDetail",
+    component: BlogDetail,
     props: true,
   },
   {

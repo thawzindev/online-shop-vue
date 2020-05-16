@@ -60,7 +60,7 @@
                                     <div class="quantity">
                                         <div class="pro-qty">
                                             <span class="dec qtybtn" @click="decreaseQty(item.product.id)">-</span>
-                                                <input type="text" :value="item.quantity">
+                                                <input type="text" :value="item.quantity" readonly>
                                             <span class="inc qtybtn" @click="increaseQty(item.product.id)">+</span></div>
                                     </div>
                                 </td>

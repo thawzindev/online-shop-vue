@@ -1,8 +1,8 @@
 <template>
-        <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="col-lg-4 col-md-4 col-sm-4">
             <div class="blog__item">
                 <div class="blog__item__pic">
-                    <img :src="blog.image" alt="">
+                    <img :src="blog.image" alt="" class="blogImage">
                 </div>
             <div class="blog__item__text">
                 <ul>
@@ -11,7 +11,7 @@
                 </ul>
                 <h5><a href="#">{{ blog.title }}</a></h5>
                 <p>{{ str_limit(blog.body) }}</p>
-                <a href="#" class="blog__btn">READ MORE <span class="arrow_right"></span></a>
+                <router-link class="blog__btn" :to="{ name: 'BlogDetail', params: { id: blog.id }}">READ MORE <span class="arrow_right"></span></router-link>
             </div>
         </div>
     </div>
@@ -31,8 +31,16 @@ export default {
             return moment(date).format('MMMM D,YYYY');
         },
         str_limit(string) {
-            return string.slice(0,120)+'...'
+            return string.slice(0,70)+' ...'
         }
     },
 }
 </script>
+
+<style scoped>
+
+    .blogImage {
+        height: 160px;
+    }
+
+</style>
