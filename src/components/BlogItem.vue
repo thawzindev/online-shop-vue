@@ -6,8 +6,8 @@
                 </div>
             <div class="blog__item__text">
                 <ul>
-                    <li><i class="fa fa-calendar-o"></i> {{ moment(blog.created_at) }}</li>
-                    <li><i class="fa fa-comment-o"></i> 5</li>
+                    <li><i class="fa fa-calendar-o"></i> &nbsp; {{ moment(blog.created_at) }}</li>
+                    <li><i class="fa fa-comment-o"></i> 5</li> 
                 </ul>
                 <h5><a href="#">{{ blog.title }}</a></h5>
                 <p>{{ str_limit(blog.body) }}</p>

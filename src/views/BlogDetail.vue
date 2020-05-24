@@ -21,7 +21,7 @@
         <section class="blog-details spad">
         <div class="container">
             <div class="row">
-                <div class="col-lg-4 col-md-5 order-md-1 order-2">
+                <!-- <div class="col-lg-4 col-md-5 order-md-1 order-2">
                     <div class="blog__sidebar">
                         <div class="blog__sidebar__item">
                             <h4>Recent News</h4>
@@ -56,10 +56,10 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-8 col-md-7 order-md-1 order-1">
+                </div> -->
+                <div class="col-lg-12 col-md-7 order-md-1 order-1">
                     <div class="blog__details__text">
-                        <img :src="blog.image" alt="" width="100%" height="400px">
+                        <img :src="blog.image" alt="">
                         <p>{{ blog.body }}</p>
                     </div>
                             <div class="blog__details__content">
@@ -107,48 +107,19 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-4 col-md-4 col-sm-6">
+                <div class="col-lg-4 col-md-4 col-sm-6" v-for="sugBlog in suggestBlog" :key="sugBlog.id">
                     <div class="blog__item">
                         <div class="blog__item__pic">
-                            <img :src="blog.image" alt="">
+                            <img :src="sugBlog.image" alt="">
                         </div>
                         <div class="blog__item__text">
                             <ul>
-                                <li><i class="fa fa-calendar-o"></i> May 4,2019</li>
+                                <li><i class="fa fa-calendar-o"></i>&nbsp;{{ moment(sugBlog.created_at) }}</li>
                                 <li><i class="fa fa-comment-o"></i> 5</li>
                             </ul>
-                            <h5><a href="#">Cooking tips make cooking simple</a></h5>
-                            <p>Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam quaerat </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-6">
-                    <div class="blog__item">
-                        <div class="blog__item__pic">
-                            <img :src="blog.image" alt="">
-                        </div>
-                        <div class="blog__item__text">
-                            <ul>
-                                <li><i class="fa fa-calendar-o"></i> May 4,2019</li>
-                                <li><i class="fa fa-comment-o"></i> 5</li>
-                            </ul>
-                            <h5><a href="#">6 ways to prepare breakfast for 30</a></h5>
-                            <p>Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam quaerat </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-4 col-sm-6">
-                    <div class="blog__item">
-                        <div class="blog__item__pic">
-                            <img :src="blog.image" alt="">
-                        </div>
-                        <div class="blog__item__text">
-                            <ul>
-                                <li><i class="fa fa-calendar-o"></i> May 4,2019</li>
-                                <li><i class="fa fa-comment-o"></i> 5</li>
-                            </ul>
-                            <h5><a href="#">Visit the clean farm in the US</a></h5>
-                            <p>Sed quia non numquam modi tempora indunt ut labore et dolore magnam aliquam quaerat </p>
+                            <h5><router-link :to="{ name: 'BlogDetail', params: { id: sugBlog.id }}">{{ sugBlog.title }} <span class="arrow_right"></span></router-link>
+                            </h5>
+                            <p>{{ str_limit(sugBlog.body) }}</p>
                         </div>
                     </div>
                 </div>
@@ -168,17 +139,23 @@ export default {
         return {
             blog : Object,
             initialized : false,
+            suggestBlog : []
         }
     },
     methods: {
-        moment(date) {
-            return moment(date).format('MMMM D,YYYY');
-        },
-    },
-    created() {
-        ProductService.getBlogById(this.id)
+        getBlogById() {
+            ProductService.getBlogById(this.id)
             .then(response => {
                 this.blog = response.data;
+            })
+            .catch(err => {
+                console.log("err" + err);
+            })
+        },
+        getSuggestBlog() {
+            ProductService.getSuggestBlog()
+            .then(response => {
+                this.suggestBlog = response.data.data
             })
             .then(() => {
                 this.initialized = true
@@ -186,6 +163,23 @@ export default {
             .catch(err => {
                 console.log("err" + err);
             })
+        },
+        moment(date) {
+            return moment(date).format('MMMM D,YYYY');
+        },
+        str_limit(string) {
+            return string.slice(0,120)+'...'
+        }
+    },
+    watch: {
+        '$route.path': function(val, oldVal){
+            console.log(val, oldVal)
+            this.getBlogById();
+        }
+    },
+    created() {
+        this.getBlogById()
+        this.getSuggestBlog()
     },
 }
 </script>
@@ -193,5 +187,11 @@ export default {
 <style scoped>
     .blog-details-hero  {
         background-image: url('../assets/img/breadcrumb.jpg');
+    }
+
+    img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
     }
 </style>

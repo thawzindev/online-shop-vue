@@ -50,6 +50,7 @@
 <script>
 import HeroSection from '@/components/HeroSection.vue'
 // import CategorySection from '@/components/CategorySection.vue'
+import NProgress from 'nprogress'
 import ProductService from '@/services/ProductService.js'
 import FeatureProduct from '@/components/FeatureProduct.vue'
 import Banner from '@/components/Banner.vue'
@@ -78,7 +79,7 @@ export default {
                     this.initialized = true
             })
             .catch(err => {
-                console.log(err);
+                console.log(err)
             })
         },  
         featureBlgs() {
@@ -89,7 +90,8 @@ export default {
                     this.initialized = true
             })
             .catch(err => {
-                console.log(err);
+                NProgress.done()
+                console.log(err)
             })
         }
     },

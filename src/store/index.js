@@ -1,13 +1,14 @@
 import Vue from "vue"
 import Vuex from "vuex"
 import ProductService from '@/services/ProductService.js'
+// import moment from 'moment' 
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
     cart: [],
-    isLoggedIn: !!localStorage.getItem("user"),
+    isLoggedIn: localStorage.getItem("user"),
     wishList: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).wishList : 0
   },
   mutations: {
@@ -96,7 +97,19 @@ export default new Vuex.Store({
       return state.cart
     },
     isLoggedIn: state => {
-      return state.isLoggedIn
+      const user =  state.isLoggedIn
+      if (user) {
+        const expire = JSON.parse(user).expire_at 
+
+        if (Date.now() > Date.parse(expire)) {
+          state.isLoggedIn = false
+          localStorage.removeItem('user')
+          return false
+        } else {
+          return true
+        }
+      }
+      return false
     },
     wishlist: state => {
       return state.wishList

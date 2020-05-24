@@ -9,7 +9,17 @@ const instance = axios.create({
         'Content-Type': 'application/json',
         'Access-Control-Allow-Origin': '*',
     }
-  });
+  })
+
+// const instance = axios.create({
+//     baseURL: 'https://blooming-beyond-33872.herokuapp.com/api',
+//     timeout: 5000,
+//     headers: {
+//         Accept: 'Application/json',
+//         'Content-Type': 'application/json',
+//         'Access-Control-Allow-Origin': '*',
+//     }
+//   })
 
   instance.defaults.withCredentials = true;
 
@@ -67,6 +77,9 @@ const instance = axios.create({
       },
       getBlogById(id) {
         return instance.get('blog/'+ id)
+      },   
+      getSuggestBlog() {
+        return instance.get('suggest-blogs')
       },   
       getFeatureBlogs() {
         return instance.get('feature-blogs')
